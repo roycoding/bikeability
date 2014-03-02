@@ -90,17 +90,13 @@ def genmap(geojsonfile, mapfile):
     # Create map
     abq_centerpoint = [35.0841034, -106.6509851]
     folmap = folium.Map(location=abq_centerpoint, tiles='Stamen Toner')
-    folmap.geo_json(geo_path=geojsonfile.replace('output/', ''), data_out='data.json', data=df,
+    folmap.geo_json(geo_path=geojsonfile.replace('output/', ''), data_out='output/data.json', data=df,
                  columns=['label', 'paths'],
                  key_on='feature.id',
-                 fill_color='YlGn', fill_opacity=0.5, line_opacity=0.2)
+                 fill_color='YlGn', fill_opacity=0.5, line_opacity=0.2,
+                legend_name='Bikeability Score (higher = better)')
     folmap.create_map(path=mapfile, template=open('map.jinja2').read())
 
-    # HACK: output file generated in the wrong place…
-    os.remove('output/data.json')
-    shutil.move('data.json', 'output/')
-
-        
 def main():
     if len(sys.argv) < 3:
         print("Try running me with: ./%s BikePaths.kml zoneatlaspagegrid.kml output/ABQsquares.json" % sys.argv[0])
